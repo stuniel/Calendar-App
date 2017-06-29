@@ -59,7 +59,6 @@ html, body, .wrapper {
   display: flex;
   flex-direction: column;
   padding: 50px;
-  padding-bottom: 100px;
 }
 
 .month-name {
@@ -77,7 +76,7 @@ html, body, .wrapper {
   flex-direction: column;
 }
 
-.week {
+.week, .day-names {
   display: flex;
   flex: 1;
   flex-direction: row;
@@ -85,7 +84,7 @@ html, body, .wrapper {
   background-color: red;*/
 }
 
-.week div {
+.week div, .day-names div {
   display: flex;
   flex: 1;
   /*border: 1px solid pink;
@@ -100,6 +99,10 @@ html, body, .wrapper {
 }
 
 .day:hover {
-  background-color: rgba(92, 188, 175, 0.5);
+  background-color: rgb(232, 232, 232);
   border-radius: 10px;
+}
+
+.sun {
+  color: rgba(250, 0, 0, 1)
 }
