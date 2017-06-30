@@ -31,8 +31,11 @@ html, body, .wrapper {
 }
 
 .tasks {
+  z-index: 1;
+  transition: flex 0.7s cubic-bezier(0.46,-0.66, 0.43, 1.37);
   display: flex;
-  flex: 2;
+  flex: 0;
+  min-width: 0;
   background-color: rgb(92, 188, 175);
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
@@ -42,7 +45,160 @@ html, body, .wrapper {
   -moz-border-radius-bottomleft: 20px;
 }
 
+.tasks-active {
+  flex: 2;
+}
+
+.tasks-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 50px;
+  color: rgba(250, 250, 250, 1);
+}
+
+.day-name {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 40px;
+}
+
+.close-tasks {
+  transform: rotate(45deg);
+  opacity: 0;
+  align-self: flex-start;
+  font-size: 20px;
+  transition: all 0.3s;
+  transition-delay: initial;
+  cursor: default;
+  font-weight: 100;
+}
+
+.close-tasks:hover {
+  transition-delay: initial;
+  transform: rotate(225deg);
+}
+
+.close-tasks-open {
+  transition-delay: 1s;
+  opacity: 1;
+}
+
+.this-date {
+  text-align: right;
+  flex: 1;
+  font-size: 20px;
+}
+
+.add-tasks {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.added-tasks {
+  display: flex;
+  flex-direction: column;
+  flex: 6;
+  overflow-y: auto;
+}
+
+.added-tasks::-webkit-scrollbar-track,
+{
+  margin: 5px;
+	background: transparent;
+}
+
+.added-tasks::-webkit-scrollbar
+{
+  width: 5px;
+	background: transparent;
+}
+
+.added-tasks::-webkit-scrollbar-thumb
+{
+  background: #fff;
+}
+
+.task {
+  display: flex;
+  align-content: space-between;
+  flex-direction: row;
+  flex-shrink: 0;
+  height: 50px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  background-color: rgba(250, 250, 250, 0.1);
+  border: 1px solid #FFF;
+  align-items: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 20px;
+}
+
+.task-name {
+  display: flex;
+  flex: 1;
+}
+
+.delete-task {
+  display: flex;
+  transform: rotate(45deg);
+  font-size: 20px;
+  cursor: default;
+  font-weight: 100;
+  top: 10px;
+  transition: all 0.3s;
+}
+
+.delete-task:hover {
+  transform: rotate(225deg);
+}
+
+.add-task {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+}
+
+.add-task form {
+  display: flex;
+  align-self: stretch;
+  flex-grow: 1;
+}
+
+.task-form {
+  opacity: 0;
+  transition: all 0.7s;
+}
+
+.form-visible {
+  opacity: 1;
+}
+
+.add-task input {
+  display: flex;
+  flex-grow: 1;
+  outline:0;
+  border: 0;
+  border-bottom: 1px solid #FFF;
+  background-color: inherit;
+  color: inherit;
+  font-family: "Roboto", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-size: 20px;
+}
+
+.add-task input::placeholder {
+  color: inherit;
+  font-family: "Roboto", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-size: 20px;
+}
+
 .calendar {
+  z-index: 2;
   display: flex;
   flex: 3;
   background-color: #fff;
@@ -52,6 +208,22 @@ html, body, .wrapper {
   -webkit-border-bottom-right-radius: 20px;
   -moz-border-radius-topright: 20px;
   -moz-border-radius-bottomright: 20px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  -webkit-border-top-left-radius: 20px;
+  -webkit-border-bottom-left-radius: 20px;
+  -moz-border-radius-topleft: 20px;
+  -moz-border-radius-bottomleft: 20px;
+  transition: all 0.7s;
+}
+
+.calendar-active {
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  -webkit-border-top-left-radius: 0px;
+  -webkit-border-bottom-left-radius: 0px;
+  -moz-border-radius-topleft: 0px;
+  -moz-border-radius-bottomleft: 0px;
 }
 
 .calendar-container {
@@ -68,6 +240,14 @@ html, body, .wrapper {
   justify-content: space-between;
   align-items: center;
   font-size: 40px;
+}
+
+.now-month {
+  transition: all 0.3s;
+}
+
+.now-month-opacity {
+  opacity: 0;
 }
 
 .days {
@@ -100,7 +280,16 @@ html, body, .wrapper {
 
 .day:hover {
   background-color: rgb(232, 232, 232);
-  border-radius: 10px;
+}
+
+.today-circle {
+  color: #fff;
+  background-color: rgb(92, 188, 175);
+}
+
+.day-with-task {
+  color: #fff;
+  background-color: rgba(92, 188, 175, 0.5);
 }
 
 .sun {
