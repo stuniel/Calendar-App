@@ -51,6 +51,7 @@ html, body, .wrapper {
 
 .tasks-container {
   flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   padding: 50px;
@@ -104,6 +105,7 @@ html, body, .wrapper {
   flex-direction: column;
   flex: 6;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .added-tasks::-webkit-scrollbar-track,
@@ -137,6 +139,25 @@ html, body, .wrapper {
   padding-left: 20px;
   padding-right: 20px;
   font-size: 20px;
+  opacity: 1;
+  transition: all 0.4s;
+  transition: transform 0.2s;
+  cursor: -webkit-grab;
+  cursor: grab;
+}
+
+.dragged-task {
+  opacity: 0.5;
+}
+
+.draggable {
+  user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -moz-user-drag: element;
+  -khtml-user-drag: element;
+  -webkit-user-drag: element;
 }
 
 .task-name {
@@ -152,10 +173,20 @@ html, body, .wrapper {
   font-weight: 100;
   top: 10px;
   transition: all 0.3s;
+  opacity: 0;
 }
 
 .delete-task:hover {
   transform: rotate(225deg);
+}
+
+.cross-visible {
+  opacity: 1;
+}
+
+.removed-task {
+  transform: translateX(200px);
+  opacity: 0;
 }
 
 .add-task {
@@ -228,6 +259,7 @@ html, body, .wrapper {
 
 .calendar-container {
   flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   padding: 50px;
@@ -240,6 +272,14 @@ html, body, .wrapper {
   justify-content: space-between;
   align-items: center;
   font-size: 40px;
+}
+
+.prev-month, .next-month {
+  cursor: default;
+}
+
+.prev-month:hover, .next-month:hover {
+  color: rgb(232, 232, 232);
 }
 
 .now-month {
@@ -282,9 +322,13 @@ html, body, .wrapper {
   background-color: rgb(232, 232, 232);
 }
 
-.today-circle {
+.today-background {
   color: #fff;
-  background-color: rgb(92, 188, 175);
+  background-color: rgba(92, 188, 175, 0.7);
+}
+
+.clicked-day-highlight {
+  background-color: rgba(92, 188, 175, 0.2);
 }
 
 .day-with-task {
@@ -294,4 +338,95 @@ html, body, .wrapper {
 
 .sun {
   color: rgba(250, 0, 0, 1)
+}
+
+
+@media only screen and (max-width: 1200px) {
+
+  html. body, .wrapper {
+    height: 100%;
+  }
+
+  .container {
+    width: 100%;
+    min-height: 100%;
+  }
+
+  .tasks {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    -webkit-border-top-left-radius: 0px;
+    -webkit-border-bottom-left-radius: 0px;
+    -webkit-border-top-right-radius: 0px;
+    -webkit-border-bottom-right-radius: 0px;
+    -moz-border-radius-topleft: 0px;
+    -moz-border-radius-bottomleft: 0px;
+    -moz-border-radius-topright: 0px;
+    -moz-border-radius-bottomright: 0px;
+  }
+
+  .calendar {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    -webkit-border-top-left-radius: 0px;
+    -webkit-border-bottom-left-radius: 0px;
+    -webkit-border-top-right-radius: 0px;
+    -webkit-border-bottom-right-radius: 0px;
+    -moz-border-radius-topleft: 0px;
+    -moz-border-radius-bottomleft: 0px;
+    -moz-border-radius-topright: 0px;
+    -moz-border-radius-bottomright: 0px;
+  }
+}
+
+@media only screen and (max-width: 960px) {
+
+  .container {
+    flex-direction: column;
+  }
+
+  .tasks {
+    order: 2;
+  }
+
+  .tasks-active {
+    flex: 3;
+  }
+
+  .calendar {
+    order: 1;
+  }
+
+}
+
+@media only screen and (max-width: 500px) {
+
+  .tasks-container {
+    padding: 25px;
+  }
+
+  .calendar-container {
+    padding: 25px;
+  }
+
+  .now-day {
+    font-size: 20px;
+  }
+
+  .this-date {
+    text-align: inherit;
+    margin-left: 5px;
+  }
+
+  .month-name {
+    font-size: 24px;
+  }
+
+  .week div, .day-names div {
+    font-size: 16px;
+  }
 }
