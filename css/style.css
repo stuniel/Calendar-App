@@ -8,8 +8,12 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-html, body, .wrapper {
+html, body {
   height: 100%;
+}
+
+.wrapper {
+  min-height: 100%;
 }
 
 .wrapper {
@@ -28,6 +32,7 @@ html, body, .wrapper {
   align-items: stretch;
   width: 1200px;
   height: 750px;
+  transition: all 0.7s;
 }
 
 .tasks {
@@ -43,19 +48,46 @@ html, body, .wrapper {
   -webkit-border-bottom-left-radius: 20px;
   -moz-border-radius-topleft: 20px;
   -moz-border-radius-bottomleft: 20px;
+  overflow: hidden;
 }
 
 .tasks-active {
   flex: 2;
 }
 
+.tasks-arrow {
+  visibility: hidden;
+  position: absolute;
+  display: flex;
+  width: 100%;
+  height: 25px;
+  top: calc(100vh - 25px);
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(250, 250, 250, 0.5);
+}
+
+.tasks-arrow span {
+  /*flex: 1;*/
+  color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  font-size: 2em;
+}
+
 .tasks-container {
-  flex: 1;
+  flex: 0;
   min-width: 0;
+  visibility: hidden;
   display: flex;
   flex-direction: column;
   padding: 50px;
   color: rgba(250, 250, 250, 1);
+  transition: flex 0.7s cubic-bezier(0.46,-0.66, 0.43, 1.37);
+}
+
+.tasks-container-active {
+  flex: 1;
+  visibility: visible;
 }
 
 .day-name {
@@ -89,9 +121,16 @@ html, body, .wrapper {
 }
 
 .this-date {
+  opacity: 0;
   text-align: right;
   flex: 1;
   font-size: 20px;
+  transition: all 0.5s;
+  transition-delay: 0.3s;
+}
+
+.this-date-active {
+  opacity: 1;
 }
 
 .add-tasks {
@@ -246,6 +285,7 @@ html, body, .wrapper {
   -moz-border-radius-topleft: 20px;
   -moz-border-radius-bottomleft: 20px;
   transition: all 0.7s;
+  overflow: hidden;
 }
 
 .calendar-active {
@@ -259,7 +299,7 @@ html, body, .wrapper {
 
 .calendar-container {
   flex: 1;
-  min-width: 0;
+  /*min-width: 0;*/
   display: flex;
   flex-direction: column;
   padding: 50px;
@@ -341,15 +381,38 @@ html, body, .wrapper {
 }
 
 
+@media only screen and (max-height: 650px) and (min-width: 501px){
+  .wrapper, .container {
+    min-height: 650px;
+  }
+}
+@media only screen and (max-height: 650px) and (max-width: 500px){
+  .wrapper, .container {
+    min-height: 400px;
+  }
+}
+
+
+
 @media only screen and (max-width: 1200px) {
 
   html. body, .wrapper {
     height: 100%;
+    background-color: red;
+    /*max-height: 100%;*/
+  }
+
+  .wrapper {
+    width: 100%;
+    /*height: 100vh;*/
+    min-height: 65vh;
+    /*max-height: auto;*/
   }
 
   .container {
     width: 100%;
-    min-height: 100%;
+    height: 100vh;
+    /*max-height: auto;*/
   }
 
   .tasks {
@@ -380,13 +443,27 @@ html, body, .wrapper {
     -moz-border-radius-bottomleft: 0px;
     -moz-border-radius-topright: 0px;
     -moz-border-radius-bottomright: 0px;
+
+    .calendar-container {
+      min-height: 0;
+    }
   }
 }
 
 @media only screen and (max-width: 960px) {
 
+  /*.wrapper {
+    min-height: 100%;
+  }*/
+
   .container {
     flex-direction: column;
+    min-height: 100vh;
+    /*min-height: 100%;*/
+  }
+
+  .container-active {
+    min-height: 200vh;
   }
 
   .tasks {
@@ -397,6 +474,10 @@ html, body, .wrapper {
     flex: 3;
   }
 
+  .tasks-arrow-active {
+    visibility: visible;
+  }
+
   .calendar {
     order: 1;
   }
@@ -404,6 +485,34 @@ html, body, .wrapper {
 }
 
 @media only screen and (max-width: 500px) {
+
+  .tasks-container {
+    padding: 25px;
+  }
+
+  .calendar-container {
+    padding: 25px;
+  }
+
+  .now-day {
+    font-size: 20px;
+  }
+
+  .this-date {
+    text-align: inherit;
+    margin-left: 5px;
+  }
+
+  .month-name {
+    font-size: 24px;
+  }
+
+  .week div, .day-names div {
+    font-size: 16px;
+  }
+}
+
+@media only screen and (max-height: 400px) {
 
   .tasks-container {
     padding: 25px;

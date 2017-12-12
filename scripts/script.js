@@ -5,6 +5,8 @@ const nextMonth = document.querySelector('.next-month');
 const weeks = document.querySelectorAll('.week');
 let days = document.querySelectorAll('.day');
 const tasks = document.querySelector('.tasks');
+const tasksContainer = document.querySelector('.tasks-container');
+const tasksArrow = document.querySelector('.tasks-arrow');
 const calendar = document.querySelector('.calendar');
 const nowDay = document.querySelector('.now-day');
 const thisDate = document.querySelector('.this-date');
@@ -59,7 +61,6 @@ function setDate() {
     currentMonth += 12;
     currentYear -= 1;
   }
-
   let yearMonthDate = currentYear + "-" + currentMonth;
   const chosenMonth = new Date(yearMonthDate)
   setTimeout(function() {
@@ -71,13 +72,14 @@ function setDate() {
 }
 
 function drawDaysTable(chosenMonth) {
+  //Finding the first day of the month
   const weekDay = chosenMonth.getDay();
   days.forEach(day => day.classList.remove('clicked-day-highlight'));
 
-  const numberOfDays = new Date(currentYear, currentMonth - 1, 0).getDate();
+  const numberOfDays = new Date(currentYear, currentMonth, 0).getDate();
   let weekNumber = 1;
   weeks.forEach(week => {
-    for (i = 0; i < 7; i++) {
+    for (let i = 0; i < 7; i++) {
       let dayNumber = (i - weekDay + 1) + (weekNumber * 7 - 7);
       if (dayNumber > 0 && dayNumber <= numberOfDays) {
         week.querySelector(`.${weekDays[i]}`).innerText = dayNumber;
@@ -99,17 +101,25 @@ function clickedDay() {
   this.classList.add('clicked-day-highlight');
   lastClicked = this;
   drawTasks(day);
-  showTasks(dayParse);
+  updateTasks(dayParse);
 }
 
 function drawTasks(day) {
   createDate();
+  container.classList.add('container-active');
   tasks.classList.add('tasks-active');
+  tasksContainer.classList.add('tasks-container-active');
+  tasksArrow.classList.add('tasks-arrow-active');
+  thisDate.classList.add('this-date-active');
   calendar.classList.add('calendar-active');
   closeCross.classList.add('close-tasks-open');
   form.classList.add('form-visible');
   closeCross.addEventListener('click', function() {
+    container.classList.remove('container-active');
     tasks.classList.remove('tasks-active');
+    tasksContainer.classList.remove('tasks-container-active');
+    tasksArrow.classList.remove('tasks-arrow-active');
+    thisDate.classList.remove('this-date-active');
     calendar.classList.remove('calendar-active');
     closeCross.classList.remove('close-tasks-open');
     form.classList.remove('form-visible');
@@ -125,7 +135,7 @@ function createTask(e) {
     number: (function () {
       let password = "";
       const passwordLetters = "qwertyuiopasdfghjklzxcvbnm1234567890";
-      for (i = 0; i < 12; i++) {
+      for (let i = 0; i < 12; i++) {
         password += passwordLetters.charAt(Math.random() * passwordLetters.length);
       }
       return password;
@@ -133,7 +143,7 @@ function createTask(e) {
   }
   taskList.push(task);
   localStorage.setItem('taskList', JSON.stringify(taskList));
-  showTasks(dayParse);
+  updateTasks(dayParse);
   highlightToday(day);
   this.reset();
   if (window.innerWidth < 501) {
@@ -142,7 +152,7 @@ function createTask(e) {
   console.table(taskList);
 }
 
-function showTasks(today) {
+function updateTasks(today) {
   addedTasks.innerHTML = taskList
     .filter(task => {
       return task.dateParse == today;
@@ -157,6 +167,7 @@ function showTasks(today) {
   printedTasks.forEach(printedTask => printedTask.addEventListener('touchstart', startDragging));
   printedTasks.forEach(printedTask => printedTask.addEventListener('dragstart', function(e) {
     e.dataTransfer.setData('text/plain', 'node');
+    startDragging();
   }));
   printedTasks.forEach(printedTask => printedTask.addEventListener('drag', continueDragging));
   printedTasks.forEach(printedTask => printedTask.addEventListener('touchmove', continueDraggingTouch));
@@ -191,7 +202,7 @@ function showTasks(today) {
         }
       })
     }
-    showTasks(dayParse);
+    updateTasks(dayParse);
     printedTasks.forEach(printedTask => {
       if (printedTask.dataset.number == this.dataset.number) {
         shadowTask = printedTask;
@@ -211,7 +222,7 @@ function showTasks(today) {
         taskList.move(taskList.indexOf(draggedElementObject), taskList.indexOf(overDraggedElementObject));
       }
     })
-    showTasks(dayParse);
+    updateTasks(dayParse);
   }
 
   // Close cross
@@ -219,34 +230,25 @@ function showTasks(today) {
   printedTasks.forEach(printedTask => printedTask.addEventListener('mouseover', function(e) {
     this.querySelector('.delete-task').classList.add('cross-visible');
   }));
-  printedTasks.forEach(printedTask => printedTask.addEventListener('mouseout', closeCrossInvisible));
-}
+  printedTasks.forEach(printedTask => printedTask.addEventListener('mouseout', function(e) {
+    this.querySelector('.delete-task').classList.remove('cross-visible');
+  }));
 
-
-
-
-// function closeCrossVisible(e) {
-//   this.querySelector('.delete-task').classList.add('cross-visible');
-// }
-
-function closeCrossInvisible(e) {
-  this.querySelector('.delete-task').classList.remove('cross-visible');
-}
-
-function deleteTask(e) {
-  const elmNumber = this.parentElement.dataset.number;
-  taskList.forEach(task => {
-    if (elmNumber == task.number) {
-      console.log(this.parentNode);
-      this.parentElement.classList.add('removed-task');
-      const elmIndex = taskList.indexOf(task);
-      this.parentElement.parentNode.removeChild(this.parentElement);
-      console.log(this.parentNode);
-      taskList.splice((elmIndex), 1);
-      localStorage.setItem('taskList', JSON.stringify(taskList));
-      highlightToday(day);
+  function deleteTask(e) {
+    const elmNumber = this.parentElement.dataset.number;
+    taskList.forEach(task => {
+      if (elmNumber == task.number) {
+        console.log(this.parentNode);
+        this.parentElement.classList.add('removed-task');
+        const elmIndex = taskList.indexOf(task);
+        this.parentElement.parentNode.removeChild(this.parentElement);
+        console.log(this.parentNode);
+        taskList.splice((elmIndex), 1);
+        localStorage.setItem('taskList', JSON.stringify(taskList));
+        highlightToday(day);
       }
-  });
+    });
+  }
 }
 
 function createDate() {
@@ -275,6 +277,20 @@ function highlightToday(date) {
   }));
 }
 
+function scrollPageToTasks(e) {
+  console.log(this.getBoundingClientRect().bottom);
+  console.log(window.scrollY);
+  const tasksTop = this.getBoundingClientRect().bottom;
+  let taskScroll = 0;
+  while (taskScroll < tasksTop) {
+    setInterval(function() {
+      taskScroll += 10 + "px";
+      window.scrollTo(0, taskScroll);
+    }, 10);
+  }
+}
+
+tasksArrow.addEventListener('click', scrollPageToTasks);
 prevMonth.addEventListener('click', skipMonth);
 nextMonth.addEventListener('click', forwardMonth);
 form.addEventListener('submit', createTask);
@@ -296,7 +312,7 @@ if (!Array.prototype.indexOf) {
     } else if (fromIndex < 0) {
         fromIndex = Math.max(0, this.length + fromIndex);
     }
-    for (var i = fromIndex, j = this.length; i < j; i++) {
+    for (let i = fromIndex, j = this.length; i < j; i++) {
         if (this[i] === obj)
             return i;
     }
